@@ -1,0 +1,183 @@
+$font-family: 'Lexend Deca', sans-serif;
+$dark: #171717;
+
+@import url('https://fonts.googleapis.com/css?family=Lexend+Deca&display=swap&subset=latin-ext');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+*:focus {
+    outline: none;
+}
+
+html {
+    font-size: 10px;
+}
+
+body {
+    font-family: $font-family;
+    font-size: 1.5rem;
+    color: $dark;
+}
+
+.app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    min-height: 100vh;
+    padding: 20px 0;
+    background: #f2f2f2;
+
+    &--dark {
+        background: $dark;
+        .todo {
+            color: #fff;
+            background: #2a2a2a;
+            box-shadow: 0 0 0 rgba(0,0,0,0.5);
+        }
+    }
+}
+
+.form {
+    position: relative;
+    &__input {
+        display: block;
+        width: 100%;
+        height: 52px;
+        margin-right: 10px;
+        border: 1px solid #f2f2f2;
+        padding: 0 50px 0 15px;
+        font-family: $font-family;
+        font-size: 1.8rem;
+        &::placeholder {
+            color: #d7d7d7;
+        }
+    }
+    &__button {
+        position: absolute;
+        top: 28px;
+        right: 28px;
+        font-size: 0;
+        line-height: 0;
+        border: 0;
+        background: transparent;
+        width: 25px;
+        height: 25px;
+        cursor: pointer;
+        &--plus {
+            opacity: .5;
+            transition: .2s opacity ease;
+            &::after, &::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 100%;
+                height: 3px;
+                border-radius: 5px;
+                background: $dark;                
+                transform: translate(-50%,-50%);                
+            }
+            &::before {                
+                transform: translate(-50%,-50%) rotate(90deg);
+            }    
+            &:hover {
+                opacity: 1;
+            }        
+        }
+    }
+}
+
+.todo {
+    display: block;
+    width: calc(100% - 30px);
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
+    overflow: hidden;
+    &__add {
+        padding: 15px;
+        border-bottom: 1px solid #f2f2f2;
+        &__error {
+            font-size: 1.3rem;
+            line-height: 1.1;
+            color: #d65a5a;
+            text-align: center;
+            margin: 5px 0 0 0;
+        }
+    }
+    &__tabs {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #f2f2f2;
+        flex-flow: row nowrap;
+        &__tab {
+            font-family: $font-family;
+            font-size: 1.3rem;
+            line-height: 1;
+            text-transform: uppercase;
+            color: gray;
+            border: 0;
+            background: transparent;
+            cursor: pointer;
+            margin: 0 10px 0 0;
+            &:last-child { margin: 0; }   
+            &--active {
+                color: #b9851a;
+            }      
+        }
+    }
+    &__list {
+        display: block;
+        width: 100%;
+        margin: 0 auto;
+        list-style: none;       
+        &__item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #fff;
+            &:nth-child(even) {
+                background: #f8f8f8;
+            }
+            &__value {
+                flex: 0 0 calc(100% - 14px);
+                padding-right: 10px;
+                &--empty {
+                    flex: 0 0 100%;
+                    padding: 0;
+                    text-align: center;
+                }
+            }
+            &__action {
+                flex: 0 0 14px;
+                text-align: right;
+            }
+            &__button {
+                background: transparent;
+                border: 0;
+                width: 14px;
+                cursor: pointer;
+                img {
+                    opacity: .3;
+                    display: block;
+                    margin: 0;
+                    width: 100%;
+                    transition: .2s opacity ease;
+                    pointer-events: none;
+                }
+                &:hover img {
+                    opacity: 1;
+                }
+            }
+        }
+    }    
+}
