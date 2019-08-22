@@ -6,6 +6,7 @@ class ToDo extends Component {
 
         this.state = {
             draft: '',
+            recentlyAdded: false,
             error: null,
             tab: 'list',
             tasks: (props.tasks.length > 0) ? Array.from(JSON.parse(props.tasks)) : ['Create a new react-app', 'Create first commit', 'Push all changes into master'],
@@ -46,12 +47,14 @@ class ToDo extends Component {
 
     // Add new task
     updateTasks = () => {
-        let { draft, tasks } = this.state;
-        if(draft && draft.trim().length > 3) {
+        let { draft, tasks, recentlyAdded } = this.state;
+        if(draft !== '' && draft.trim().length > 3) {
             tasks.push(draft);
-            this.setState({ draft: '' });
-        } else {
+            this.setState({ draft: '', tasks: tasks, recentlyAdded: true });
+        } else if (recentlyAdded === false) {
             this.setState({ error: 'The task should contain at least 4 letters.' });
+        } else {
+            this.setState({ recentlyAdded: false })
         }
     }
 
@@ -76,6 +79,18 @@ class ToDo extends Component {
         localStorage.setItem('todo_archive', JSON.stringify(this.state.archive));
     }
 
+    // Reset storage, and set defaults
+    resetStorage = () => {
+        localStorage.clear();
+        this.setState({
+            draft: '',
+            recentlyAdded: false,
+            error: null,
+            tasks: ['Create a new react-app', 'Create first commit', 'Push all changes into master'],
+            archive: ['Register at Github'],
+        })
+    }
+
     render() {
         this.saveInLocalStorage();
         return(
@@ -85,9 +100,9 @@ class ToDo extends Component {
                         type="text" 
                         className="form__input" 
                         value={this.state.draft} 
-                        placeholder={this.randomPlaceholder()}
-                        onChange={e => this.setState({ draft: e.target.value, error: null })} 
-                        onKeyUp={e => {(e.key === 'Enter') && this.updateTasks()}}    
+                        placeholder={this.randomPlaceholder()}                        
+                        onChange={e => this.setState({ draft: e.target.value, error: null })}    
+                        onKeyPress={e => {(e.key === 'Enter') && this.updateTasks()}}                    
                     />
                     <button className="form__button form__button--plus" onClick={() => this.updateTasks()}></button>
                     {this.state.error && <div className="todo__add__error">{this.state.error}</div>}
@@ -96,10 +111,12 @@ class ToDo extends Component {
                     ?   <div className="todo__tabs">
                             <button className="todo__tabs__tab todo__tabs__tab--active" onClick={e => this.setState({ tab: 'list' })}>To-do list</button>
                             <button className="todo__tabs__tab" onClick={e => this.setState({ tab: 'archive' })}>Archived tasks</button>
+                            <button className="todo__tabs__tab" onClick={e => this.resetStorage()}>Sample data</button>
                         </div>
                     :   <div className="todo__tabs">
                             <button className="todo__tabs__tab" onClick={e => this.setState({ tab: 'list' })}>To-do list</button>
                             <button className="todo__tabs__tab todo__tabs__tab--active" onClick={e => this.setState({ tab: 'archive' })}>Archived tasks</button>
+                            <button className="todo__tabs__tab" onClick={e => this.resetStorage()}>Sample data</button>
                         </div>                
                 }
                 <ul className="todo__list">
